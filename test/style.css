@@ -1,0 +1,42 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  font-size: 62.5%;
+  box-sizing: border-box;
+}
+h3 {
+  /* background-color: white; */
+}
+
+#memeGenForm {
+  display: grid;
+  grid-template-rows: auto;
+  justify-items: center;
+  margin-top: 2rem;
+}
+
+.meme-area {
+  position: relative;
+}
+.new-meme-upperText {
+  position: relative;
+  top: 2rem;
+  display: flex;
+}
+.new-meme-lowerText {
+  position: relative;
+  bottom: 2rem;
+}
+
+button {
+  margin: 2rem;
+  padding: 1rem;
+}
+
+input {
+  margin-right: 2rem;
+}
