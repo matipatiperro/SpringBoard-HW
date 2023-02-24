@@ -19,18 +19,25 @@ async function getAndShowStoriesOnStart() {
  * Returns the markup for the story.
  */
 
-function generateStoryMarkup(story) {
+function generateStoryMarkup(story, showDeleteBtn = false) {
   // console.debug("generateStoryMarkup", story);
 
   const hostName = story.getHostName();
+
+  // if a user is logged in, show favorite/not-favorite star
+  const showStar = Boolean(currentUser);
   return $(`
       <li id="${story.storyId}">
+      <div>
+      ${showDeleteBtn ? makeDeleteBtnHTML() : ""}
+      ${showStar ? makeStarHTML(story, currentUser) : ""}
         <a href="${story.url}" target="a_blank" class="story-link">
           ${story.title}
         </a>
         <small class="story-hostname">(${hostName})</small>
         <small class="story-author">by ${story.author}</small>
         <small class="story-user">posted by ${story.username}</small>
+        </div>
       </li>
     `);
 }
@@ -49,4 +56,83 @@ function putStoriesOnPage() {
   }
 
   $allStoriesList.show();
+}
+
+async function addStoryToPage(e) {
+  e.preventDefault();
+  console.log("addStoryToPage");
+
+  const storyAuthor = $("#author-input").val();
+  const storyName = $("#story-input").val();
+  const storyURL = $("#story-url").val();
+
+  const story = await storyList.addStory(currentUser, {
+    title: storyName,
+    url: storyURL,
+    author: storyAuthor,
+  });
+
+  // console.log(storyData);
+  // {title: 'test', url: 'https://www.test.com', author: 'test', username: 'matias'}
+  // author: 'test'
+  // title: 'test'
+  // url: 'https://www.test.com'
+  // username: 'matias'
+
+  console.log(story);
+
+  const $story = generateStoryMarkup(story);
+
+  $allStoriesList.prepend($story);
+  $storyForm.toggle();
+  $storyForm.trigger("reset");
+}
+
+$formSubmit.on("submit", addStoryToPage);
+
+async function deleteStory(e) {
+  const $closestLi = $(e.target).closest("li");
+  const storyId = $closestLi.attr("id");
+
+  await storyList.removeStory(currentUser, storyId);
+
+  // re-generate story list
+  await putUserStoriesOnPage();
+}
+
+$ownStories.on("click", ".trash-can", deleteStory);
+
+function putUserStoriesOnPage() {
+  console.debug("putUserStoriesOnPage");
+
+  $ownStories.empty();
+
+  if (currentUser.ownStories.length === 0) {
+    $ownStories.append("<h5>No stories added by user yet!</h5>");
+  } else {
+    // loop through all of users stories and generate HTML for them
+    for (let story of currentUser.ownStories) {
+      let $story = generateStoryMarkup(story, true);
+      $ownStories.append($story);
+    }
+  }
+
+  $ownStories.show();
+}
+
+function makeStarHTML(story, user) {
+  const isFavorite = user.isFavorite(story);
+  //fa-star
+  const starType = isFavorite ? "checked" : "";
+  return `
+      <span class="star">
+        <i class="fa fa-star ${starType}"></i>
+      </span>`;
+}
+
+function makeDeleteBtnHTML() {
+  return `
+      <span class="trash-can">
+        <i class="fas fa-trash-alt"></i>
+      </span>`;
 }

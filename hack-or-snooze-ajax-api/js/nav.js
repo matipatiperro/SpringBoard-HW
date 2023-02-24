@@ -33,4 +33,19 @@ function updateNavOnLogin() {
   $navLogin.hide();
   $navLogOut.show();
   $navUserProfile.text(`${currentUser.username}`).show();
+
+  $submitBtn.show();
 }
+
+function navShowForm() {
+  $storyForm.toggle();
+}
+$submitBtn.on("click", navShowForm);
+
+function navMyStories(e) {
+  hidePageComponents();
+  putUserStoriesOnPage();
+  $ownStories.show();
+}
+
+$body.on("click", "#nav-btn-mine", navMyStories);
