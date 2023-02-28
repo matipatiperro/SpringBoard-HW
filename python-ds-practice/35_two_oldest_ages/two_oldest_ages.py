@@ -21,3 +21,10 @@ def two_oldest_ages(ages):
     # you may find it helpful to research the `sorted(iter)` function, which
     # can take *any* type of list-like-thing, and returns a new, sorted list
     # from it.
+    setAges = set(ages)
+    firstMax = max(setAges)
+    setAges.remove(firstMax)
+
+    secondMAx = max(setAges)
+
+    return (firstMax, secondMAx)
