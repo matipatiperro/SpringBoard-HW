@@ -21,3 +21,8 @@ nav {
   margin-left: auto;
   text-align: right;
 }
+
+section {
+  padding-left: 1rem;
+  display: flex;
+}

@@ -7,7 +7,6 @@ const BASE_URL = "https://hack-or-snooze-v3.herokuapp.com";
  */
 
 class Story {
-
   /** Make instance of Story from data object about story:
    *   - {title, author, url, username, storyId, createdAt}
    */
@@ -28,7 +27,6 @@ class Story {
     return "hostname.com";
   }
 }
-
 
 /******************************************************************************
  * List of Story instances: used by UI to show story lists in DOM.
@@ -60,7 +58,7 @@ class StoryList {
     });
 
     // turn plain old story objects from API into instances of Story class
-    const stories = response.data.stories.map(story => new Story(story));
+    const stories = response.data.stories.map((story) => new Story(story));
 
     // build an instance of our own class using the new array of stories
     return new StoryList(stories);
@@ -73,11 +71,50 @@ class StoryList {
    * Returns the new Story instance
    */
 
-  async addStory( /* user, newStory */) {
-    // UNIMPLEMENTED: complete this function!
+  async addStory(user, newStory) {
+    // POST a story https://hack-or-snooze-v3.herokuapp.com/stories
+    // {
+    //   "token": "YOUR_TOKEN_HERE",
+    //   "story": {
+    //       "author": "Matt Lane",
+    //       "title": "The best story ever",
+    //       "url": "http://google.com"
+    //   }
+    // user class is defined below
+    let token = user.loginToken;
+
+    // https://github.com/axios/axios#axios-api
+    // Send a POST request
+    // axios({
+    //   method: 'post',
+    //   url: '/user/12345',
+    //   data: {
+    //     firstName: 'Fred',
+    //     lastName: 'Flintstone'
+    //   }
+    // });
+    const response = await axios({
+      method: "post",
+      url: `${BASE_URL}/stories`,
+      data: {
+        token: token,
+        story: {
+          author: newStory.author,
+          title: newStory.title,
+          url: newStory.url,
+        },
+      },
+    });
+
+    // make sure that returns an instance of the Story class:
+    console.log(response);
+
+    // data:{story: {…}}{author: 'Me', createdAt: '2023-03-03T04:21:40.814Z', storyId: 'af3073f9-982e-4b6d-b067-98f810374a0e', title: 'Test', updatedAt: '2023-03-03T04:21:40.814Z', …}
+    // looks like response.data.story has the story information
+    const story = new Story(response.data.story);
+    return story;
   }
 }
-
 
 /******************************************************************************
  * User: a user in the system (only used to represent the current user)
@@ -89,21 +126,17 @@ class User {
    *   - token
    */
 
-  constructor({
-                username,
-                name,
-                createdAt,
-                favorites = [],
-                ownStories = []
-              },
-              token) {
+  constructor(
+    { username, name, createdAt, favorites = [], ownStories = [] },
+    token
+  ) {
     this.username = username;
     this.name = name;
     this.createdAt = createdAt;
 
     // instantiate Story instances for the user's favorites and ownStories
-    this.favorites = favorites.map(s => new Story(s));
-    this.ownStories = ownStories.map(s => new Story(s));
+    this.favorites = favorites.map((s) => new Story(s));
+    this.ownStories = ownStories.map((s) => new Story(s));
 
     // store the login token on the user so it's easy to find for API calls.
     this.loginToken = token;
@@ -123,7 +156,7 @@ class User {
       data: { user: { username, password, name } },
     });
 
-    let { user } = response.data
+    let { user } = response.data;
 
     return new User(
       {
@@ -131,7 +164,7 @@ class User {
         name: user.name,
         createdAt: user.createdAt,
         favorites: user.favorites,
-        ownStories: user.stories
+        ownStories: user.stories,
       },
       response.data.token
     );
@@ -158,7 +191,7 @@ class User {
         name: user.name,
         createdAt: user.createdAt,
         favorites: user.favorites,
-        ownStories: user.stories
+        ownStories: user.stories,
       },
       response.data.token
     );
@@ -184,7 +217,7 @@ class User {
           name: user.name,
           createdAt: user.createdAt,
           favorites: user.favorites,
-          ownStories: user.stories
+          ownStories: user.stories,
         },
         token
       );

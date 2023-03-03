@@ -50,3 +50,26 @@ function putStoriesOnPage() {
 
   $allStoriesList.show();
 }
+
+function submitForm(e) {
+  e.preventDefault();
+
+  const storyTitle = $submitFormTitle.val();
+  const storyAuthor = $submitFormAuthor.val();
+  const storyURL = $submitFormURL.val();
+
+  const newStory = {
+    title: storyTitle,
+    author: storyAuthor,
+    url: storyURL,
+  };
+  storyList.addStory(currentUser, newStory);
+
+  $submitFormTitle.val("");
+  $submitFormAuthor.val("");
+  $submitFormURL.val("");
+
+  $submitForm.toggleClass("hidden");
+}
+
+$submitForm.on("submit", submitForm);
