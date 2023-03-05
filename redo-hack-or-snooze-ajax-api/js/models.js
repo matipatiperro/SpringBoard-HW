@@ -107,11 +107,12 @@ class StoryList {
     });
 
     // make sure that returns an instance of the Story class:
-    console.log(response);
+    // console.log("yooo", response);
 
     // data:{story: {…}}{author: 'Me', createdAt: '2023-03-03T04:21:40.814Z', storyId: 'af3073f9-982e-4b6d-b067-98f810374a0e', title: 'Test', updatedAt: '2023-03-03T04:21:40.814Z', …}
-    // looks like response.data.story has the story information
+    // looks like response.data.story has the data needed to create an instance of Story class (defined above)
     const story = new Story(response.data.story);
+    currentUser.addMyStory(story);
     return story;
   }
 }
@@ -137,6 +138,8 @@ class User {
     // instantiate Story instances for the user's favorites and ownStories
     this.favorites = favorites.map((s) => new Story(s));
     this.ownStories = ownStories.map((s) => new Story(s));
+
+    // console.log(this.favorites);
 
     // store the login token on the user so it's easy to find for API calls.
     this.loginToken = token;
@@ -225,5 +228,53 @@ class User {
       console.error("loginViaStoredCredentials failed", err);
       return null;
     }
+  }
+
+  //////// Add / remove favorites
+  async addFavorite(storyID) {
+    // POST
+    // https://hack-or-snooze-v3.herokuapp.com/users/{username}/favorites/{storyID}
+    const story = storyList.stories.find((s) => s.storyId === storyID);
+    this.favorites.push(story);
+    const token = this.loginToken;
+    await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${storyID}`,
+      method: "post",
+      data: { token },
+    });
+  }
+  async removeFavorite(storyID) {
+    // DELETE
+    // https://hack-or-snooze-v3.herokuapp.com/users/{username}/favorites/{storyID}
+    // const index = this.favorites.indexOf(storyID);
+    // if (index != -1) {
+    //   this.favorites.splice(index, 1);
+    // }
+    this.favorites = this.favorites.filter((s) => s.storyId !== storyID);
+    const token = this.loginToken;
+    await axios({
+      url: `${BASE_URL}/users/${this.username}/favorites/${storyID}`,
+      method: "delete",
+      data: { token },
+    });
+    console.log(this.favorites);
+  }
+
+  //////// Add / remove my stories
+  addMyStory(story) {
+    this.ownStories.push(story);
+  }
+  async removeMyStory(storyId) {
+    // DELETE
+    // https://hack-or-snooze-v3.herokuapp.com/stories/7df55f38-2611-48c2-b01f-6a4e38f80855
+    // body:   {"token": "YOUR_TOKEN_HERE"}
+    // const token = this.loginToken;
+    let response = await axios({
+      url: `${BASE_URL}/stories/${storyId}`,
+      method: "DELETE",
+      data: { token: this.loginToken },
+    });
+    this.ownStories = this.ownStories.filter((s) => s.storyId !== storyId);
+    return response;
   }
 }

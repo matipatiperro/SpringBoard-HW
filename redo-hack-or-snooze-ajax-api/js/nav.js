@@ -41,5 +41,16 @@ function updateNavOnLogin() {
 
 function navShowForm() {
   $submitForm.toggleClass("hidden");
+  // $submitForm.toggleClass("nav-selected");
 }
 $navSubmit.on("click", navShowForm);
+
+function navShowFavorites() {
+  putFavoritesOnPage();
+
+  if (!$($submitForm).hasClass("hidden")) {
+    $submitForm.toggleClass("hidden");
+  }
+  // $navFavorites.toggleClass("nav-selected");
+}
+$navFavorites.on("click", navShowFavorites);

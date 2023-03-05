@@ -11,7 +11,10 @@ const $loginForm = $("#login-form");
 const $signupForm = $("#signup-form");
 
 const $navLoggedInSection = $(".logged-in-buttons");
+const $navHome = $("#nav-all");
 const $navSubmit = $("#nav-submit");
+const $navFavorites = $("#nav-favorites");
+const $navMyStories = $("#nav-my-stories");
 const $submitForm = $(".submit-form");
 const $submitFormTitle = $("#form-title");
 const $submitFormAuthor = $("#form-author");
@@ -21,6 +24,9 @@ const $submitFormButton = $("#form-submit");
 const $navLogin = $("#nav-login");
 const $navUserProfile = $("#nav-user-profile");
 const $navLogOut = $("#nav-logout");
+
+// used to keep track if the user is viewing the my stories tab
+let myStoriesTab = false;
 
 /** To make it easier for individual components to show just themselves, this
  * is a useful function that hides pretty much everything on the page. After
