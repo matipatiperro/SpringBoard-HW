@@ -25,17 +25,27 @@ def home_page():
 
 @app.route('/questions/<int:qnum>',methods = ['POST', 'GET'])
 def questions(qnum):
-    title = satisfaction_survey.title
-    text = satisfaction_survey.questions[qnum].question
-    choices = satisfaction_survey.questions[qnum].choices
+   
     if (responses is None):
         # trying to access question page too soon
         return redirect("/")
-
+    
+    if (len(responses) == len(satisfaction_survey.questions)):
+        # They've answered all the questions! Thank them.
+        return redirect("/")
+    
     if (qnum >= len(satisfaction_survey.questions)):
         # They've answered all the questions! Thank them.
-        print("equal")
         return redirect("/answered")
+
+    if (len(responses) != qnum):
+        # Trying to access questions out of order.
+        flash(f"Invalid question id: {qnum}.")
+        return redirect(f"/questions/{len(responses)}")
+
+    title = satisfaction_survey.title
+    text = satisfaction_survey.questions[qnum].question
+    choices = satisfaction_survey.questions[qnum].choices
 
     if request.method == 'GET':
         return render_template("questions.html", title = title, text = text, choices = choices, qnum=qnum)
