@@ -93,6 +93,8 @@ class StoryList {
     //     lastName: 'Flintstone'
     //   }
     // });
+
+    // TA REVIEW: DO A TRY CATCH HERE
     const response = await axios({
       method: "post",
       url: `${BASE_URL}/stories`,
