@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Boggle hw</title>
+  </head>
+  <body>
+    <section class="board-section">
+      <table class="board-table">
+        {% for row in board %}
+        <tr>
+          {% for letter in row %}
+          <td>{{letter}}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </table>
+    </section>
+    <!-- <p>
+        High Score:
+        <b>{{ highscore }}</b>
+        in {{ nplays }} plays
+      </p> -->
+
+    <p>Score: <b class="score">0</b> Seconds Left: <b class="timer"></b></p>
+    <form action="" method="post" class="submit-word-form">
+      <div>
+        <label for="word">Enter your word: </label>
+        <input type="text" name="submitted-word" id="word" required />
+        <div class="form-button">
+          <input type="submit" value="submit word!" />
+        </div>
+      </div>
+    </form>
+    <p class="msg">
+      <!-- our JS will put messages here dynamically -->
+    </p>
+    <ul class="words">
+      <!-- our JS will words here as they score -->
+    </ul>
+    <script src="http://unpkg.com/jquery"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/static/boggle.js"></script>
+  </body>
+</html>
