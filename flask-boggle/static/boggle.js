@@ -15,10 +15,10 @@ async function logSubmit(event) {
   // check server for validity
   const resp = await axios.get("/check", { params: { word: word } });
   if (resp.data.result === "not-word") {
-    console.log("not a valid English word");
+    // console.log("not a valid English word");
     showMessage(`${word} is not a valid English word`, "err");
   } else if (resp.data.result === "not-on-board") {
-    console.log(`${word} is not a valid word on this board`);
+    // console.log(`${word} is not a valid word on this board`);
     showMessage(`${word} is not a valid word on this board`, "err");
   } else {
     console.log(`Added: ${word}`);
