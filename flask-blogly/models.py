@@ -19,9 +19,14 @@ class User(db.Model):
     last_name = db.Column(db.String(50),
                     nullable=False,
                     unique=False)
-    image_url = db.Column(db.String(50),
+    image_url = db.Column(db.String(150),
                     nullable=False,
-                    unique=True, default = default_image)
+                    unique=False, default = default_image)
+    @property
+    def first_last_name(self):
+        """Return full name of user."""
+
+        return f"{self.first_name} {self.last_name}"
 
 def connect_db(app):
     """Connect this database to provided Flask app."""

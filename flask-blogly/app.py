@@ -13,8 +13,8 @@ app.config['SQLALCHEMY_ECHO'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'not_telling'
 
-# with app.app_context():
-#     db.create_all()
+# needed and not in the curriculum notes
+app.app_context().push()
 
 connect_db(app)
 db.create_all()
@@ -24,7 +24,8 @@ db.create_all()
 def root():
     if request.method=='GET':
         """Homepage redirects to list of users."""
-        return render_template("users.html")
+        # return render_template("users.html")
+        return redirect('/users')
     else:
         return render_template("create.html")
         # return redirect('/create')
@@ -53,7 +54,7 @@ def create_user():
     db.session.add(new_user)
     db.session.commit()
 
-    return redirect("/users.html")
+    return redirect("/users")
 
 @app.route('/users/<int:user_id>')
 def users_show(user_id):
@@ -68,3 +69,27 @@ def users_edit(user_id):
 
     user = User.query.get_or_404(user_id)
     return render_template('edit.html', user=user)
+
+@app.route('/users/<int:user_id>/edit', methods=["POST"])
+def users_update(user_id):
+    """update user"""
+
+    user = User.query.get_or_404(user_id)
+    user.first_name = request.form['first_name']
+    user.last_name = request.form['last_name']
+    user.image_url = request.form['image_url']
+
+    db.session.add(user)
+    db.session.commit()
+
+    return redirect("/users")
+
+@app.route('/users/<int:user_id>/delete', methods=["POST"])
+def delete_user(user_id):
+    """delete existing user"""
+
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
+    db.session.commit()
+
+    return redirect("/users")

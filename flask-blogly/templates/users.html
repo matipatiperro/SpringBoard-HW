@@ -10,7 +10,9 @@
     <h1>Users</h1>
     {%for user in users%}
     <ul>
-      {{ user.full_name }}
+      <!-- {{ user.first_name }} {{ user.last_name }} -->
+      <!-- {{ user.first_last_name }} -->
+      <a href="/users/{{ user.id }}">{{ user.first_last_name }}</a>
     </ul>
     {%endfor%}
     <form action="/create" method="GET">
