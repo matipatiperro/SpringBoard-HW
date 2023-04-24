@@ -33,6 +33,11 @@
 
       {% endfor %}
       <button type="submit">Update</button>
+      <div>
+        <button formaction="/{{ pet.id }}/delete" formmethod="POST">
+          Delete
+        </button>
+      </div>
     </form>
 
     {% endblock %}

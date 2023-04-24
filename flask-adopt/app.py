@@ -67,3 +67,14 @@ def edit_pet(pet_id):
     else:
         # failed; re-present form for editing
         return render_template("edit_pet.html", form=form, pet=pet)
+
+@app.route('/<int:pet_id>/delete', methods=["POST"])
+def delete_pet(pet_id):
+    """delete existing pet"""
+
+    pet = Pet.query.get_or_404(pet_id)
+    db.session.delete(pet)
+    db.session.commit()
+    flash(f"{pet.name} removed.")
+
+    return redirect(url_for('show_pets'))
