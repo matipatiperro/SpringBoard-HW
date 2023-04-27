@@ -1,17 +1,17 @@
 from app import app
-from models import db, Cupcake
+from models import db, Cupcakes
 
 
 db.drop_all()
 db.create_all()
 
-c1 = Cupcake(
+c1 = Cupcakes(
     flavor="cherry",
     size="large",
     rating=5,
 )
 
-c2 = Cupcake(
+c2 = Cupcakes(
     flavor="chocolate",
     size="small",
     rating=9,
