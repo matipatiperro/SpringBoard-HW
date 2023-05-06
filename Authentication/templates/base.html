@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/style.css" type="text/css" />
+  </head>
+  <body>
+    <nav class="crumbs">
+      <ul>
+        <!-- <li class="crumb"><a href="#">Bikes</a></li> -->
+        <!-- <li class="crumb"><a href="#">BMX</a></li> -->
+        <li class="crumb">Home page</li>
+        {% if 'username' in session %}
+        <a class="nav-link" href="logout">logout</a>
+        {% else %}
+        <a class="nav-link" href="login">log-in</a>
+        {% endif %}
+      </ul>
+    </nav>
+
+    <div>
+      {% for msg in get_flashed_messages() %}
+      <div>{{ msg }}</div>
+      {% endfor %} {% block content %}
+      <!-- put the content here -->
+      {% endblock %}
+    </div>
+  </body>
+</html>

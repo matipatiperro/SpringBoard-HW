@@ -1,0 +1,33 @@
+nav {
+  border-bottom: 1px solid black;
+}
+
+.crumbs ol {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.crumb {
+  display: inline-block;
+  color: red;
+}
+
+.nav-link {
+  padding-left: 6rem;
+}
+
+nav {
+  border: 1px;
+  /* background-color: green; */
+  /* color: white; */
+  padding: 6px;
+}
+
+.crumb a::after {
+  display: inline-block;
+  color: #000;
+  content: ">";
+  font-size: 80%;
+  font-weight: bold;
+  padding: 0 3px;
+}
