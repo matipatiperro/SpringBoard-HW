@@ -6,7 +6,7 @@
 
 let baseURL = "https://deckofcardsapi.com/api/deck";
 
-let firstQ = async function first() {
+let firstQ = function first() {
   let deck = null;
   let firstCard = null;
   $.getJSON(`${baseURL}/new/shuffle/?deck_count=1`)
@@ -21,7 +21,7 @@ let firstQ = async function first() {
 };
 // firstQ();
 
-let secondQ = async function second() {
+let secondQ = function second() {
   let deck = null;
   let deck_count = 1;
   let cardCount = 2;
