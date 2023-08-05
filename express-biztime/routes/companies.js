@@ -1,4 +1,5 @@
 const express = require("express");
+const slugify = require("slugify"); // part 2 -converts a string to a URL-friendly slug format
 
 const app = express();
 const ExpressError = require("../expressError");
@@ -18,15 +19,26 @@ router.get("/", async function (req, res, next) {
   }
 });
 
+// Change this route:
+// - when viewing details for a company, you can see the names of the industries for that company
 router.get("/:code", async function (req, res, next) {
-  //   console.log("HERE1");
+  // console.log("HERE1");
   try {
     let code = req.params.code;
-    const results = await db.query(`SELECT * FROM companies WHERE code =$1`, [
-      code,
-    ]);
-    // console.log(...results.rows);
-    return res.json({ company: results.rows });
+    const compResults = await db.query(
+      `SELECT name FROM companies WHERE code =$1`,
+      [code]
+    );
+    console.log(...compResults.rows);
+    const indResult = await db.query(
+      `SELECT industries_code
+       FROM industries_companies
+       WHERE companies_code = $1`,
+      [code]
+    );
+    console.log(...compResults.rows);
+    console.log(...indResult.rows);
+    return res.json({ company: compResults.rows, industries: indResult.rows });
   } catch (err) {
     return next(err);
   }
@@ -38,7 +50,8 @@ router.post("/", async function (req, res, next) {
   //   console.log("HERE2");
   try {
     let { name, description } = req.body;
-    let code = name.toLowerCase();
+    // let code = name.toLowerCase();
+    let code = slugify(name);
     const inserted = await db.query(
       `INSERT INTO companies (code, name, description)
     VALUES ($1,$2,$3) RETURNING code, name, description`,
