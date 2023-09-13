@@ -6,10 +6,11 @@
 
 function choice(items) {
   let rdm = Math.floor(Math.random() * items.length);
-  return rdm;
+  return items[rdm];
 }
 
-function remove(items, item) {
+function remove(item, items) {
+  console.log("item is: ", item);
   let loc = items.indexOf(item);
   if (loc === -1) return undefined;
   return [...items.slice(0, loc), ...items.slice(loc + 1, items.length)];

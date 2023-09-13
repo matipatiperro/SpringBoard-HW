@@ -16,5 +16,5 @@ console.log(`Here you go: ${fruit}`);
 console.log(`Delicious! May I have another?`);
 
 let leftover = remove(fruit, fruits);
-
+console.log(leftover);
 console.log(`I'm sorry, we're all out. We have ${leftover.length} left.`);
