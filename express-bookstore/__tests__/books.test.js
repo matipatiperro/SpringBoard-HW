@@ -21,9 +21,9 @@ let book_isbn;
 //     year INTEGER
 //   );
 
-beforeEach(async () => {
+beforeAll(async () => {
   let result =
-    await db.query(`INSERT INTO "books" (isbn,amazon_url,author,language,pages,publisher,title,year) 
+    await db.query(`INSERT INTO "books" (isbn,amazon_url,author,language,pages,publisher,title,year)
     VALUES(
     '1234567890',
     'https://amazon.com/first',
@@ -33,12 +33,15 @@ beforeEach(async () => {
     'Mati publishers',
     'my first book', 2023)
   RETURNING isbn`);
+  console.log(result.rows[0].isbn);
   book_isbn = result.rows[0].isbn;
 });
 
 describe("GET /books", function () {
   test("Gets a list of 1 book", async function () {
     const response = await request(app).get(`/books`);
+    console.log("**************************");
+    console.log(response.body);
     const books = response.body.books;
     expect(books).toHaveLength(1);
     expect(books[0]).toHaveProperty("isbn");
@@ -46,9 +49,16 @@ describe("GET /books", function () {
   });
 });
 
-afterEach(async function () {
-  await db.query("DELETE FROM BOOKS");
+describe("DELETE /books/:isbn", function () {
+  test("Deletes a single a book", async function () {
+    const response = await request(app).delete(`/books/${book_isbn}`);
+    expect(response.body).toEqual({ message: "Book deleted" });
+  });
 });
+
+// afterEach(async function () {
+//   await db.query("DELETE FROM books-test");
+// });
 
 afterAll(async function () {
   await db.end();

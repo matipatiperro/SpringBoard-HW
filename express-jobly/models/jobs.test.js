@@ -67,22 +67,28 @@ describe("findAll", function () {
     console.log(jobs);
     expect(jobs).toEqual([
       {
+        id: 116,
         title: "J1",
         salary: 100,
         equity: null,
         company_handle: "c1",
+        name: "C1",
       },
       {
+        id: 117,
         title: "J2",
         salary: 200,
         equity: null,
         company_handle: "c2",
+        name: "C2",
       },
       {
+        id: 118,
         title: "J3",
         salary: 300,
         equity: null,
         company_handle: "c3",
+        name: "C3",
       },
     ]);
   });

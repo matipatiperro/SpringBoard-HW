@@ -1,4 +1,4 @@
-CREATE TABLE books (
+CREATE TABLE "books" (
   isbn TEXT PRIMARY KEY,
   amazon_url TEXT,
   author TEXT,
